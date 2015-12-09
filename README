@@ -1,0 +1,26 @@
+txtcrunch is a compressed text format. This README gives its official
+description -- if there's any difference between this document and the
+implementation, it is, a priori, a bug in the implementation.
+
+A txtcrunch text is divided in two sections:
+
+ - Dictionary section, which lists all common terms used in the text
+ - Text section, which contains normal texts and references to the dictionary
+
+Each term in the dictionary section ends with an unescaped number sign (#); the
+dictionary itself ends at the first unescaped exclamation mark (!). In both
+sections, escaping is done by placing a backslash at the left side of the
+character -- (for example: \!, \#, \\). Exclamation marks don't need to be
+escaped in the text section.
+
+Everything after the dictionary section is the text section. A reference to the
+dictionary is denoted by an unescaped number sign, followed by a number,
+followed by another number sign (for example: #3#); the number between the
+number signs is the index of the term in the dictionary, which is zero-indexed.
+References that have out-of-range indexes or non-numeric contents (say, #blah#)
+should be kept as they are in the uncompressed text; valid references should be
+replaced by their corresponding terms in the dictionary.
+
+Any uncompression method that respects the rules above and produces plain text
+is correct; any compression method that produces a valid txtcrunch text is also
+correct.
