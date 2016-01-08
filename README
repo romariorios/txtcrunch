@@ -7,17 +7,18 @@ A txtcrunch text is divided in two sections:
  - Dictionary section, which lists all common terms used in the text
  - Text section, which contains normal texts and references to the dictionary
 
-Each term in the dictionary section ends with an unescaped number sign (#); the
-dictionary itself ends at the first unescaped exclamation mark (!). In both
-sections, escaping is done by placing a backslash at the left side of the
-character -- (for example: \!, \#, \\). Exclamation marks don't need to be
-escaped in the text section.
+Each term in the dictionary section, with the exception of the last one, ends
+with an unescaped number sign (#); the dictionary itself ends at the first
+unescaped exclamation mark (!). In both sections, escaping is done by placing
+a backslash at the left side of the character -- (for example: \!, \#, \\).
+Exclamation marks don't need to be escaped in the text section.
 
 Everything after the dictionary section is the text section. A reference to the
-dictionary is denoted by an unescaped number sign, followed by a number,
-followed by another number sign (for example: #3#); the number between the
-number signs is the index of the term in the dictionary, which is zero-indexed.
-References that have out-of-range indexes or non-numeric contents (say, #blah#)
+dictionary is denoted by an unescaped number sign, followed by a number (for
+example: #3); the number after the number sign is the index of the term in the
+dictionary, which is zero-indexed; to separate an index from a number following
+it, the escaping character (i.e., \) should be used (for instance: #35\2452).
+References that have out-of-range indexes or non-numeric contents (say, #blah)
 should be kept as they are in the uncompressed text; valid references should be
 replaced by their corresponding terms in the dictionary.
 
