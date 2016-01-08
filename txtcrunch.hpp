@@ -1,5 +1,5 @@
-/*  Qt Model/View Templates
-    Copyright (c) 2015 Luiz Romário Santana Rios <luizromario@gmail.com>
+/*  C++ implementation of the txtcrunch format
+    Copyright (c) 2015-2016 Luiz Romário Santana Rios <luizromario@gmail.com>
     All rights reserved.
     Redistribution and use in source and binary forms, with or without
     modification, are permitted provided that the following conditions are met:
@@ -47,7 +47,11 @@ std::string uncompress(const std::string &in)
             continue;
         }
 
-        if (ch == '#') {
+        const auto lookahead = *(it + 1);
+        if (ch == '#' || lookahead == '!') {
+            if (lookahead == '!')
+                cur_entry.push_back(ch);
+
             entries.push_back(cur_entry);
             cur_entry.clear();
             continue;
@@ -62,25 +66,35 @@ std::string uncompress(const std::string &in)
     std::string res;
 
     auto is_number = false;
+    const auto substr = in.substr(in_index + 1);
     std::string number;
-    for (const auto ch : in.substr(in_index + 1)) {
+    for (auto it = substr.cbegin(); it != substr.cend(); ++it) {
+        const auto ch = *it;
+
         if (ch == '#') {
-            if (is_number) {
+            is_number = true;
+            continue;
+        }
+
+        if (is_number) {
+            number.push_back(ch);
+
+            const auto lookahead = *(it + 1);
+            if (lookahead < '0' || lookahead > '9') {
                 auto index = std::stoi(number);
                 number.clear();
 
                 if (index >= 0 && index < entries.size())
                     res.append(entries[index]);
                 else
-                    res.append("#" + std::to_string(index) + "#");
+                    res.append("#" + std::to_string(index));
+
+                is_number = false;
             }
 
-            is_number = !is_number;
-            continue;
-        }
+            if (lookahead == '\\')
+                ++it;
 
-        if (is_number) {
-            number.push_back(ch);
             continue;
         }
 
