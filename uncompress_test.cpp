@@ -26,6 +26,7 @@ int main()
         "the#0#1 of Erasable, but many member functions impose stricter#0#1");
     show_uncompression(R"( an exclamation mark (\!)!This text has#0)");
     show_uncompression(R"(HAH\! !#0This text references a non-existing entry: #1)");
+    show_uncompression(R"( (of course) !Testing separation between reference and an actual number#0\123)");
 
     return 0;
 }
